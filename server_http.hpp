@@ -357,8 +357,12 @@ namespace SimpleWeb {
                     if(!ec) {
                         if(timeout_content>0)
                             timer->cancel();
-                        auto http_version=stof(request->http_version);
-                        
+                        float http_version = 0.0;
+                        try{
+                            http_version=stof(request->http_version);
+                        }catch(std::invalid_argument){
+                            return;
+                        }
                         auto range=request->header.equal_range("Connection");
                         for(auto it=range.first;it!=range.second;it++) {
                             if(boost::iequals(it->second, "close"))
